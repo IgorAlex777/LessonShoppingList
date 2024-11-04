@@ -8,7 +8,9 @@ interface WorkingSoppingList {
 
     fun removeShopItemFromShoppingList(shopItem: ShopItem)
 
-    fun  editShopItemInShoppingList(shopItem: ShopItem)
+    fun  editShopItem(shopItem: ShopItem)
+
+    fun getShopItem(id:Int):ShopItem
 
 }
 
