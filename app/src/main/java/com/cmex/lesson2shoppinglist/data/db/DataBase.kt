@@ -1,13 +1,11 @@
 package com.cmex.lesson2shoppinglist.data.db
 
 import android.content.Context
-import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.cmex.lesson2shoppinglist.data.dao.DaoShoppingList
-import com.cmex.lesson2shoppinglist.domain.ShopItem
 
-@Database(entities = [ShopItem::class], version = 1)
+//@Database(entities = [ShopItem::class], version = 1)
 abstract class DataBase :RoomDatabase(){
     abstract fun getDao(): DaoShoppingList
     companion object{
