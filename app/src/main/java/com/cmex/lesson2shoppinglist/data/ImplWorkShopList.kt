@@ -3,6 +3,7 @@ package com.cmex.lesson2shoppinglist.data
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.cmex.lesson2shoppinglist.domain.ShopItem
+import kotlin.random.Random
 
 object ImplWorkShopList : InterfaceWorkToShopList{
     private val shopListLiveData=MutableLiveData<List<ShopItem>>()
@@ -10,8 +11,11 @@ object ImplWorkShopList : InterfaceWorkToShopList{
    
 
     init {
-        for(i in 0 ..10) {
-          val shopItem=ShopItem("name$i",i,true,i)
+        for(i in 0 ..25) {
+            val number= (0..1).random()
+            val active = number != 0
+
+          val shopItem=ShopItem("name$i",i,active,i)
           shopList.add(shopItem)
         }
     }

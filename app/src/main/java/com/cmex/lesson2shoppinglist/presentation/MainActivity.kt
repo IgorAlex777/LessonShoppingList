@@ -3,45 +3,44 @@ package com.cmex.lesson2shoppinglist.presentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
-import com.cmex.lesson2shoppinglist.R
-import com.cmex.lesson2shoppinglist.data.ImplWorkShopList
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.cmex.lesson2shoppinglist.data.myLog
+import com.cmex.lesson2shoppinglist.databinding.ActivityMainBinding
 import com.cmex.lesson2shoppinglist.domain.ShopItem
 
 class MainActivity : AppCompatActivity() {
-    private val viewModel by lazy {
-        ViewModelProvider(this)[ViewModelShoppingList::class.java]
-    }
-
+    private val model by lazy { ViewModelProvider(this)[ViewModelShoppingList::class.java] }
+    private lateinit var  adapterShopList :AdapterShopList
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
 
-
-
+        initRecyclerView()
         initObserverShopList()
-        addShopItem()
-        editShopItem()
-        deleteShopItem()
-
-
+        onClickLong()
+        onClickItem()
+    }
+    private fun initRecyclerView(){
+        adapterShopList= AdapterShopList()
+       binding.rvShoppingList.layoutManager=LinearLayoutManager(this)
+        binding.rvShoppingList.adapter=adapterShopList
     }
     private fun initObserverShopList(){
-        viewModel.shopListViewModel.observe(this){
-            val list=it
-            myLog("shoppingList=$it")
+        model.shopListViewModel.observe(this){
+            adapterShopList.shopList=it as MutableList<ShopItem>
         }
     }
-    private fun editShopItem(){
-          val shopItem=ShopItem("Oleg",7,true,1)
-        viewModel.editShopItem(shopItem)
+    private fun onClickLong(){
+      adapterShopList.listenerClickLong={
+          val active=!it.active
+          model.editShopItem(ShopItem(it.name,it.count,active=active,it.id))
+      }
     }
-    private fun addShopItem(){
-        val shopItem=ShopItem("Igor",2,true)
-        viewModel.addShopItem(shopItem)
+    private fun onClickItem(){
+        adapterShopList.listenerClickItem={
+           myLog("click")
+        }
     }
-   private  fun deleteShopItem(){
-        val shopItem=ImplWorkShopList.getShopItem(5)
-        viewModel.removeShopItem(shopItem)
-    }
+
 }
