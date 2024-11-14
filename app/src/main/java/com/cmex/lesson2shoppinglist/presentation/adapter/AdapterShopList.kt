@@ -1,13 +1,11 @@
-package com.cmex.lesson2shoppinglist.presentation
+package com.cmex.lesson2shoppinglist.presentation.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.cmex.lesson2shoppinglist.R
-import com.cmex.lesson2shoppinglist.data.myLog
 import com.cmex.lesson2shoppinglist.databinding.ItemShopBinding
 import com.cmex.lesson2shoppinglist.domain.ShopItem
 
