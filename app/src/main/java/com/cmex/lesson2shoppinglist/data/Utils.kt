@@ -1,7 +1,10 @@
 package com.cmex.lesson2shoppinglist.data
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.util.Log
+import androidx.core.graphics.ColorUtils
+import androidx.core.view.WindowInsetsControllerCompat
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -25,3 +28,15 @@ fun utilTextDateToDate(dateText:String,pattern:String):Long{
     }
    return 0
 }
+//устанвливаем цвет статус бара. И взависимости от цвета фона устанавливем цвет текста
+fun utilSetColorStatusBar(activity: Activity, color:Int){
+    val window= activity.window
+    window.statusBarColor= color
+    WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars =
+        !isDark(color)
+}
+
+private fun isDark(color: Int): Boolean {
+    return ColorUtils.calculateLuminance(color) < 0.5
+}
+//=====================================================================================

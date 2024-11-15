@@ -45,21 +45,22 @@ class ListAdapterShopItems : ListAdapter<ShopItem,ListAdapterShopItems.Holder>(D
         }
         return holder.setData(getItem(position))
     }
-    class Holder( view: View) : RecyclerView.ViewHolder(view){
-    private  val name=view.findViewById<TextView>(R.id.tvName)
-    private  val count=view.findViewById<TextView>(R.id.tvCount)
+    class Holder( view: View) : RecyclerView.ViewHolder(view) {
+        private val name = view.findViewById<TextView>(R.id.tvName)
+        private val count = view.findViewById<TextView>(R.id.tvCount)
 
-        fun setData(shopItem: ShopItem){
-           name.text=shopItem.name
-         count.text=shopItem.count.toString()
+        fun setData(shopItem: ShopItem) {
+            name.text = shopItem.name
+            count.text = shopItem.count.toString()
 
-            }
         }
-    companion object{
-        private const val ACTIVE=777
-        private const val INACTIVE=888
-        const val POOL=10
     }
+        companion object{
+            private const val ACTIVE=777
+            private const val INACTIVE=888
+
+        }
+
     }
 
 

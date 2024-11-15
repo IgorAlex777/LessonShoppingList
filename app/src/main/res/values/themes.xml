@@ -6,4 +6,12 @@
     </style>
 
     <style name="Theme.Lesson2ShoppingList" parent="Base.Theme.Lesson2ShoppingList" />
+
+    <style name="TextLabel" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">14sp</item>
+
+    </style>
+    <style name="TextHelper" parent="TextAppearance.Design.HelperText">
+        <item name="android:textSize">10sp</item>
+    </style>
 </resources>

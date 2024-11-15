@@ -1,4 +1,15 @@
 <resources>
-    <string name="app_name">Lesson2ShoppingList</string>
+    <string name="app_name">Покупки,список</string>
     <string name="shopping_list">Список покупок</string>
+
+    <string name="name">имя</string>
+    <string name="count">количество</string>
+    <string name="input_name">введите имя</string>
+    <string name="input_count">введите количество</string>
+    <string name="edit_item">Редактирование</string>
+    <string name="add_item">Новый продукт</string>
+    <string name="error_name">ввели не верные данные продукта</string>
+    <string name="error_count">ввели не верные данные количества</string>
+    <string name="_0">0</string>
+
 </resources>
