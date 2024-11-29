@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="dataModel"
+            type="com.cmex.lesson2shoppinglist.presentation.ViewModelShoppingList" />
+    </data>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -29,6 +36,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:gravity="bottom"
+        app:bindErrorName="@{dataModel.errorInputName}"
         android:textColorHint="@color/green"
         app:hintTextAppearance="@style/TextLabel"
         app:helperTextTextAppearance="@style/TextHelper"
@@ -57,6 +65,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:textColorHint="@color/purple_700"
+        app:bindErrorCount="@{dataModel.errorInputCount}"
         app:hintTextAppearance="@style/TextLabel"
         app:helperTextTextAppearance="@style/TextHelper"
         app:helperText="@string/input_count"
@@ -89,3 +98,4 @@
         app:srcCompat="@drawable/save_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

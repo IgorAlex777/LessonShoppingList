@@ -18,13 +18,11 @@ class ItemActivity : AppCompatActivity(),FragmentItem.ListenerClose {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item)
-
-        myLog("onCreate")
-
-
+        
         onGetIntent()
         utilSetColorStatusBar(this,ContextCompat.getColor(this,R.color.grey))
     }
+
 
     private fun setFragment(fragment: Fragment) {
         supportFragmentManager.popBackStack()

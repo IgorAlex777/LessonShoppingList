@@ -6,14 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import com.cmex.lesson2shoppinglist.R
+import com.cmex.lesson2shoppinglist.databinding.ItemActiveBinding
+import com.cmex.lesson2shoppinglist.databinding.ItemInactiveBinding
 import com.cmex.lesson2shoppinglist.databinding.ItemShopBinding
 import com.cmex.lesson2shoppinglist.domain.ShopItem
 
 class ListAdapterShopItems : ListAdapter<ShopItem,ListAdapterShopItems.Holder>(DiffUtilShopItem()){
-
+    private lateinit var  binding:ViewDataBinding
     private lateinit var  context: Context
     var listenerClickLong:((ShopItem)->Unit)?=null
     var listenerClickItem:((ShopItem)->Unit)?=null
@@ -22,11 +27,14 @@ class ListAdapterShopItems : ListAdapter<ShopItem,ListAdapterShopItems.Holder>(D
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val inflater=LayoutInflater.from(parent.context)
+
         val layoutId=if(viewType== ACTIVE) R.layout.item_active
         else R.layout.item_inactive
+// DataBindingUtil где есть установка layout
+        binding=DataBindingUtil.inflate(inflater,layoutId,parent,false)
 
-        val view =inflater.inflate(layoutId,parent,false)
-        return Holder(view)
+
+        return Holder(binding)
     }
 
 
@@ -45,14 +53,20 @@ class ListAdapterShopItems : ListAdapter<ShopItem,ListAdapterShopItems.Holder>(D
         }
         return holder.setData(getItem(position))
     }
-    class Holder( view: View) : RecyclerView.ViewHolder(view) {
-        private val name = view.findViewById<TextView>(R.id.tvName)
-        private val count = view.findViewById<TextView>(R.id.tvCount)
+    class Holder(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
+
 
         fun setData(shopItem: ShopItem) {
-            name.text = shopItem.name
-            count.text = shopItem.count.toString()
-
+           when(binding){
+               is ItemActiveBinding->{
+                   binding.tvName.text=shopItem.name
+                   binding.tvCount.text=shopItem.count.toString()
+               }
+               is ItemInactiveBinding->{
+                   binding.tvName.text=shopItem.name
+                   binding.tvCount.text=shopItem.count.toString()
+               }
+           }
         }
     }
         companion object{

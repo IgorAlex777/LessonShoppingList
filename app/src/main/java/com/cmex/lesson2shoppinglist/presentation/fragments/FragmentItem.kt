@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.cmex.lesson2shoppinglist.R
 import com.cmex.lesson2shoppinglist.data.myLog
@@ -22,11 +23,14 @@ class FragmentItem : Fragment() {
     private lateinit var model:ViewModelShoppingList
     private lateinit var binding:FragmentItemBinding
     private lateinit var shopItem: ShopItem
+    private var activityContext:Context?=null
+
 
     lateinit var listenerClose:ListenerClose
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
+             activityContext=context
+        myLog("context=$activityContext")
        if (context is ListenerClose) listenerClose=context
         else throw RuntimeException("подключить Interface ListenerClose")
     }
@@ -46,22 +50,21 @@ class FragmentItem : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         model=ViewModelProvider(this)[ViewModelShoppingList::class.java]
+          initDataBindingInFragment()
         settingDataOnScreen()
         onClickSaveShopItem()
         initObservers()
         onClearError()
     }
+    //++++++++++++++++
+    private fun initDataBindingInFragment(){
+        binding.dataModel=model           // не забывать инициализацию
+        binding.lifecycleOwner=viewLifecycleOwner //  не забывать
+    }
     private fun initObservers(){
         model.endSavingModel.observe(viewLifecycleOwner){
             listenerClose.onCloseView()
 
-        }
-
-        model.errorInputName.observe(viewLifecycleOwner){
-            if(it) binding.tiName.error=getString(R.string.error_name)
-        }
-        model.errorInputCount.observe(viewLifecycleOwner){
-            if(it) binding.tilCount.error=getString(R.string.error_count)
         }
     }
     private fun onClickSaveShopItem(){
@@ -120,6 +123,7 @@ class FragmentItem : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+
         listenerClose.onCloseView()
     }
 //*************************************************************************************
