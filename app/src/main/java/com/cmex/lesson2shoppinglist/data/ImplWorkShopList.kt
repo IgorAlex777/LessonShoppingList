@@ -1,62 +1,52 @@
 package com.cmex.lesson2shoppinglist.data
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
+import com.cmex.lesson2shoppinglist.data.db.DataBase
+import com.cmex.lesson2shoppinglist.data.db.ShopItemData
+import com.cmex.lesson2shoppinglist.data.mappers.MappersShopItem
+
 import com.cmex.lesson2shoppinglist.domain.ShopItem
+import com.cmex.lesson2shoppinglist.presentation.activity.MyApp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 object ImplWorkShopList : InterfaceWorkToShopList{
-    private val shopListLiveData=MutableLiveData<List<ShopItem>>()
-  private  val shopList= mutableListOf <ShopItem>()
-   
 
-    init {
-        for(i in 0 ..25) {
-            val number= (0..1).random()
-            val active = number != 0
 
-          val shopItem=ShopItem("name$i",i,active,i)
-          shopList.add(shopItem)
-        }
+    private val context = MyApp.instance
+    private val db by lazy { DataBase.getInstance(context) }
+    private val dao = db.getDao()
+    private val mapper=MappersShopItem()
+
+
+
+    override fun getShoppingList(): LiveData<List<ShopItem>> = dao.getShopItemsFromDb().map {
+      mapper.convertShopListDataToShopListItems(it)}
+
+   override suspend fun getShopItem(id:Int): ShopItem = mapper.convertShopItemDataToShopItem(dao.getShopItem(id))
+
+
+    /*override fun getShopItem(id:Int): LiveData<ShopItem> = dao.getShopItem(id).map{
+      mapper.convertShopItemDataToShopItem(it)
+    }*/
+    override suspend fun removeShopItem(shopItem: ShopItem) {
+
+       dao.deleteShopItem(mapper.convertShopItemToShopItemData(shopItem).id)
     }
 
-    override fun getShoppingList(): LiveData<List<ShopItem>> {
-        updateShopList()
-        return shopListLiveData
+    override suspend fun editShopItem(shopItem: ShopItem) {
+      dao.editShopItem(mapper.convertShopItemToShopItemData(shopItem))
     }
 
-    override fun getShopItem(id:Int): ShopItem {
-        shopList.find { it.id==id}?.let { return it }
-        return ShopItem("empty",0,false,-1)
+    override suspend fun addShopItem(shopItem: ShopItem) {
+       dao.addShopItemInDb(mapper.convertShopItemToShopItemData(shopItem))
     }
 
-    override fun removeShopItem(shopItem: ShopItem) {
-      shopList.remove(shopItem)
-        updateShopList()
-    }
 
-    override fun editShopItem(shopItem: ShopItem) {
-        val oldShopItem= getShopItem(shopItem.id)
-        if(shopItem.name!="empty") {
-            shopList.remove(oldShopItem)
-            addShopItem(shopItem)
-        }
-    }
-
-    override fun addShopItem(shopItem: ShopItem) {
-        if(shopItem.id==-1){
-            val shopItemTemp=shopItem.copy(id= shopList.size)
-            shopList.add(shopItemTemp)
-           
-        }else{
-            shopList.add(shopItem)
-            shopList.sortWith(compareBy{ it.id })
-        }
-        updateShopList()
-    }
-
-    private fun  updateShopList(){
-       shopListLiveData.value= shopList.toList()
-   }
 
 }

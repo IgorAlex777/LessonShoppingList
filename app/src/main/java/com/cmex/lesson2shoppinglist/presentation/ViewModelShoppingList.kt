@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.cmex.lesson2shoppinglist.data.ImplWorkShopList
 import com.cmex.lesson2shoppinglist.data.usecase.AddShopItemUseCase
 import com.cmex.lesson2shoppinglist.data.usecase.EditShopItemUseCase
@@ -11,6 +12,10 @@ import com.cmex.lesson2shoppinglist.data.usecase.GetShopItemUseCase
 import com.cmex.lesson2shoppinglist.data.usecase.GetShoppingListUseCase
 import com.cmex.lesson2shoppinglist.data.usecase.RemoveShopItemUseCase
 import com.cmex.lesson2shoppinglist.domain.ShopItem
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 class ViewModelShoppingList(application: Application):AndroidViewModel(application) {
     private val listener=ImplWorkShopList
@@ -20,6 +25,7 @@ class ViewModelShoppingList(application: Application):AndroidViewModel(applicati
     private val removeShopItemUseCase=RemoveShopItemUseCase(listener)
     private val addShopItemUseCase=AddShopItemUseCase(listener)
     val shopListViewModel=getShoppingListUseCase.getShoppingListUC()
+
 
     private val _errorInputName=MutableLiveData<Boolean>()
     val errorInputName:LiveData<Boolean>
@@ -36,27 +42,46 @@ class ViewModelShoppingList(application: Application):AndroidViewModel(applicati
     private val _endSavingModel=MutableLiveData<Unit>()
     val endSavingModel:LiveData<Unit>
         get() = _endSavingModel
-    fun getShopItem(id:Int):ShopItem{
-       return getShopItemUseCase.getShopItemUC(id)
-    }
+
+   fun getShopItem(id:Int){
+       viewModelScope.launch {
+           val item= getShopItemUseCase.getShopItemUC(id)
+         _shopItemModel.postValue(item)
+       }
+   }
+
+
+
     fun editShopItem(shopItem: ShopItem){
-        editShopItemUseCase.editShopItemUC(shopItem)
+        viewModelScope.launch {
+            editShopItemUseCase.editShopItemUC(shopItem)
+        }
     }
     fun removeShopItem(shopItem: ShopItem){
-        removeShopItemUseCase.removeShopItemUC(shopItem)
+        viewModelScope.launch {
+            removeShopItemUseCase.removeShopItemUC(shopItem)
+        }
     }
-    fun addShopItem(shopItem: ShopItem){
-        addShopItemUseCase.addShopItemUC(shopItem)
+    private fun addShopItem(shopItem: ShopItem){
+        viewModelScope.launch {
+            addShopItemUseCase.addShopItemUC(shopItem)
+        }
     }
-    fun onSaveShopItem(name: String,count: String,id:Int){
-        if(onCheckingDataInput(name,count)){
-            if(id==-1){
-                addShopItem(ShopItem(name,count.toInt(),true))
+    fun onSaveShopItem(name:String, count: String,id:Int) {
+
+        if (id == 0) {
+            if (onCheckingDataInput(name, count)) {
+                addShopItem(ShopItem(name, count.toInt(), true))
                 endSaving()
-            } else{
-                val shopItem=getShopItem(id).copy(name = name,count=count.toInt())
-                editShopItem(shopItem)
-                _shopItemModel.value=shopItem
+            }
+        } else {
+            if (onCheckingDataInput(name, count)) {
+                getShopItem(id)
+                _shopItemModel.value?.let {
+                    val tempShopItem=it.copy(name = name,count=count.toInt())
+                    editShopItem(tempShopItem)
+                }
+
                 endSaving()
             }
         }
@@ -87,4 +112,6 @@ class ViewModelShoppingList(application: Application):AndroidViewModel(applicati
     private fun endSaving(){
       _endSavingModel.value=Unit
     }
+
+
 }

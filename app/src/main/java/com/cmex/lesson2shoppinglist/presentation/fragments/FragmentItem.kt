@@ -1,5 +1,6 @@
 package com.cmex.lesson2shoppinglist.presentation.fragments
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
@@ -36,7 +37,7 @@ class FragmentItem : Fragment() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        onGetArguments()
+
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,12 +47,15 @@ class FragmentItem : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         model=ViewModelProvider(this)[ViewModelShoppingList::class.java]
+        onGetArguments()
           initDataBindingInFragment()
         settingDataOnScreen()
+
         onClickSaveShopItem()
         initObservers()
         onClearError()
@@ -64,14 +68,20 @@ class FragmentItem : Fragment() {
     private fun initObservers(){
         model.endSavingModel.observe(viewLifecycleOwner){
             listenerClose.onCloseView()
-
         }
+       model.shopItemModel.observe(viewLifecycleOwner){
+           shopItem=it
+           myLog("shopItem???=$shopItem")
+           binding.tvTitle.text=getString(R.string.edit_item)
+           binding.etName.setText(shopItem.name)
+           binding.etCountItem.setText(shopItem.count.toString())
+       }
     }
-    private fun onClickSaveShopItem(){
+    private  fun onClickSaveShopItem(){
         binding.ibtnSave.setOnClickListener {
             val name=binding.etName.text.toString()
             val count=binding.etCountItem.text.toString()
-             model.onSaveShopItem(name,count,idShopItem)
+            model.onSaveShopItem(name,count,idShopItem)
         }
     }
     private fun settingDataOnScreen(){
@@ -82,12 +92,8 @@ class FragmentItem : Fragment() {
 
         if(modeScreen== ADD_ITEM){
             binding.tvTitle.text = getString(R.string.add_item)
-        } else {
-             shopItem=model.getShopItem(idShopItem)
-            binding.tvTitle.text=getString(R.string.edit_item)
-            binding.etName.setText(shopItem.name)
-            binding.etCountItem.setText(shopItem.count.toString())
         }
+
     }
     private fun onGetArguments(){
       val args=requireArguments()
@@ -101,6 +107,10 @@ class FragmentItem : Fragment() {
                 throw RuntimeException("нет данных по ID ShopItem на фрагменте")
             }
             idShopItem=args.getInt(ID_ITEM, NO_ID)
+            myLog("id=$idShopItem")
+
+            model.getShopItem(idShopItem)
+
         }
     }
     private fun onClearError(){
@@ -133,7 +143,7 @@ class FragmentItem : Fragment() {
         private const val ID_ITEM="id"
         private const val SELECT="mode"
         private const val NO_MODE=""
-        private  const val NO_ID=-1
+        private  const val NO_ID=0
 
         fun newInstanceEdit(id:Int) =
             FragmentItem().apply {
