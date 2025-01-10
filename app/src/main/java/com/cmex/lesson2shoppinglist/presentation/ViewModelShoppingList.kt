@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cmex.lesson2shoppinglist.data.ImplWorkShopList
 import com.cmex.lesson2shoppinglist.data.usecase.AddShopItemUseCase
@@ -16,14 +17,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ViewModelShoppingList(application: Application):AndroidViewModel(application) {
-    private val listener=ImplWorkShopList
-    private val getShoppingListUseCase=GetShoppingListUseCase(listener)
-    private val getShopItemUseCase=GetShopItemUseCase(listener)
-    private val editShopItemUseCase=EditShopItemUseCase(listener)
-    private val removeShopItemUseCase=RemoveShopItemUseCase(listener)
-    private val addShopItemUseCase=AddShopItemUseCase(listener)
+class ViewModelShoppingList @Inject constructor(
+    private val getShoppingListUseCase: GetShoppingListUseCase,
+    private val getShopItemUseCase: GetShopItemUseCase,
+    private val editShopItemUseCase: EditShopItemUseCase,
+    private val removeShopItemUseCase: RemoveShopItemUseCase,
+    private val addShopItemUseCase: AddShopItemUseCase
+) : ViewModel() {
+
+
     val shopListViewModel=getShoppingListUseCase.getShoppingListUC()
 
 

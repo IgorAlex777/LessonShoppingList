@@ -2,8 +2,9 @@ package com.cmex.lesson2shoppinglist.data.mappers
 
 import com.cmex.lesson2shoppinglist.data.db.ShopItemData
 import com.cmex.lesson2shoppinglist.domain.ShopItem
+import javax.inject.Inject
 
-class MappersShopItem {
+class MappersShopItem @Inject constructor() {
     fun convertShopItemToShopItemData(shopItem: ShopItem) =ShopItemData(
        id= shopItem.id,
        name= shopItem.name,

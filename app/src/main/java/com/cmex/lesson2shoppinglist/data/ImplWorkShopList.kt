@@ -1,27 +1,19 @@
 package com.cmex.lesson2shoppinglist.data
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import com.cmex.lesson2shoppinglist.data.db.DataBase
-import com.cmex.lesson2shoppinglist.data.db.ShopItemData
 import com.cmex.lesson2shoppinglist.data.mappers.MappersShopItem
-
 import com.cmex.lesson2shoppinglist.domain.ShopItem
 import com.cmex.lesson2shoppinglist.presentation.activity.MyApp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlin.random.Random
+import javax.inject.Inject
 
-object ImplWorkShopList : InterfaceWorkToShopList{
-
+class ImplWorkShopList @Inject constructor(private val mapper:MappersShopItem) : InterfaceWorkToShopList{
 
     private val context = MyApp.instance
     private val db by lazy { DataBase.getInstance(context) }
     private val dao = db.getDao()
-    private val mapper=MappersShopItem()
+
 
 
 
