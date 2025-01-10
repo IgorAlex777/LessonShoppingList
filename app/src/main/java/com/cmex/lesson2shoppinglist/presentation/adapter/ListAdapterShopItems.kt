@@ -19,7 +19,7 @@ import com.cmex.lesson2shoppinglist.domain.ShopItem
 
 class ListAdapterShopItems : ListAdapter<ShopItem,ListAdapterShopItems.Holder>(DiffUtilShopItem()){
     private lateinit var  binding:ViewDataBinding
-    private lateinit var  context: Context
+
     var listenerClickLong:((ShopItem)->Unit)?=null
     var listenerClickItem:((ShopItem)->Unit)?=null
 

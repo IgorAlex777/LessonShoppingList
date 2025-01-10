@@ -79,6 +79,7 @@ class MainActivity : AppCompatActivity(),FragmentItem.ListenerClose {
             if(it.isEmpty()){
                 binding.ivEmptyList.visibility=View.VISIBLE
             }else binding.ivEmptyList.visibility=View.GONE
+            myLog("ListShop???=$it")
            listAdapter.submitList(it)
         }
     }
