@@ -3,9 +3,10 @@ package com.cmex.lesson2shoppinglist.data
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.cmex.lesson2shoppinglist.domain.ShopItem
+import javax.inject.Inject
 import kotlin.random.Random
 
-object ImplWorkShopList : InterfaceWorkToShopList{
+class ImplWorkShopList @Inject constructor()  : InterfaceWorkToShopList{
     private val shopListLiveData=MutableLiveData<List<ShopItem>>()
   private  val shopList= mutableListOf <ShopItem>()
    

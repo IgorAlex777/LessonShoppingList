@@ -46,6 +46,11 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
     implementation ("androidx.fragment:fragment-ktx:1.8.5")
     kapt ("androidx.room:room-compiler:2.6.1")
+
+    //dagger2
+    implementation ("com.google.dagger:dagger:2.53.1")
+    kapt("com.google.dagger:dagger-compiler:2.53.1")
+
     //stop
 
     implementation("androidx.core:core-ktx:1.13.1")

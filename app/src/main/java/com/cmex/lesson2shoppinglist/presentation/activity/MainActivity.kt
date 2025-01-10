@@ -1,7 +1,6 @@
 package com.cmex.lesson2shoppinglist.presentation.activity
 
 import android.content.res.Configuration
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -9,24 +8,30 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.cmex.lesson2shoppinglist.R
-import com.cmex.lesson2shoppinglist.data.myLog
+import com.cmex.lesson2shoppinglist.data.di.DaggerComponentShopList
 import com.cmex.lesson2shoppinglist.databinding.ActivityMainBinding
 import com.cmex.lesson2shoppinglist.domain.ShopItem
 import com.cmex.lesson2shoppinglist.presentation.MyDialog
+import com.cmex.lesson2shoppinglist.presentation.ViewModelFactoryShopList
 import com.cmex.lesson2shoppinglist.presentation.ViewModelShoppingList
-import com.cmex.lesson2shoppinglist.presentation.adapter.AdapterShopList
 import com.cmex.lesson2shoppinglist.presentation.adapter.ListAdapterShopItems
 import com.cmex.lesson2shoppinglist.presentation.fragments.FragmentItem
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(),FragmentItem.ListenerClose {
-    private val model by lazy { ViewModelProvider(this)[ViewModelShoppingList::class.java] }
+    @Inject
+   lateinit var  viewModelFactory:ViewModelFactoryShopList
+    private val model by lazy { ViewModelProvider(this,viewModelFactory)[ViewModelShoppingList::class.java] }
     private lateinit var  listAdapter: ListAdapterShopItems
     private val hostActivity:AppCompatActivity?=null
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val component by lazy {
+        DaggerComponentShopList.create()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
+        component.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 

@@ -9,9 +9,12 @@ import androidx.fragment.app.Fragment
 import com.cmex.lesson2shoppinglist.R
 import com.cmex.lesson2shoppinglist.data.myLog
 import com.cmex.lesson2shoppinglist.data.utilSetColorStatusBar
+import com.cmex.lesson2shoppinglist.presentation.ViewModelFactoryShopList
 import com.cmex.lesson2shoppinglist.presentation.fragments.FragmentItem
+import javax.inject.Inject
 
 class ItemActivity : AppCompatActivity(),FragmentItem.ListenerClose {
+
     private var modeScreen= NO_MODE
     private var idShopItem= NO_ID
 

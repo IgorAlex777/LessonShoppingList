@@ -8,28 +8,33 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.cmex.lesson2shoppinglist.R
+import com.cmex.lesson2shoppinglist.data.di.DaggerComponentShopList
 import com.cmex.lesson2shoppinglist.data.myLog
 import com.cmex.lesson2shoppinglist.databinding.FragmentItemBinding
 import com.cmex.lesson2shoppinglist.domain.ShopItem
+import com.cmex.lesson2shoppinglist.presentation.ViewModelFactoryShopList
 import com.cmex.lesson2shoppinglist.presentation.ViewModelShoppingList
-import com.cmex.lesson2shoppinglist.presentation.activity.ItemActivity
+import javax.inject.Inject
 
 class FragmentItem : Fragment() {
+    @Inject
+    lateinit var viewModelFactory:ViewModelFactoryShopList
    private var modeScreen= NO_MODE
     private var idShopItem= NO_ID
     private lateinit var model:ViewModelShoppingList
     private lateinit var binding:FragmentItemBinding
     private lateinit var shopItem: ShopItem
     private var activityContext:Context?=null
-
+    private val component by lazy { DaggerComponentShopList.create() }
 
     lateinit var listenerClose:ListenerClose
     override fun onAttach(context: Context) {
         super.onAttach(context)
-             activityContext=context
+        component.inject(this)
+        activityContext=context
+
         myLog("context=$activityContext")
        if (context is ListenerClose) listenerClose=context
         else throw RuntimeException("подключить Interface ListenerClose")
@@ -49,7 +54,7 @@ class FragmentItem : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        model=ViewModelProvider(this)[ViewModelShoppingList::class.java]
+        model=ViewModelProvider(this,viewModelFactory)[ViewModelShoppingList::class.java]
           initDataBindingInFragment()
         settingDataOnScreen()
         onClickSaveShopItem()
