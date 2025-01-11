@@ -12,13 +12,14 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.cmex.lesson2shoppinglist.R
-import com.cmex.lesson2shoppinglist.data.di.DaggerComponentShopList
+
 import com.cmex.lesson2shoppinglist.data.myLog
 import com.cmex.lesson2shoppinglist.databinding.FragmentItemBinding
 import com.cmex.lesson2shoppinglist.domain.ShopItem
 import com.cmex.lesson2shoppinglist.presentation.ViewModelFactoryShopList
 import com.cmex.lesson2shoppinglist.presentation.ViewModelShoppingList
 import com.cmex.lesson2shoppinglist.presentation.activity.ItemActivity
+import com.cmex.lesson2shoppinglist.presentation.activity.MyApp
 import javax.inject.Inject
 
 class FragmentItem : Fragment() {
@@ -31,7 +32,7 @@ class FragmentItem : Fragment() {
     private lateinit var shopItem: ShopItem
     private var activityContext:Context?=null
     private val component by lazy{
-        DaggerComponentShopList.create()
+        (requireActivity().application as MyApp).component
     }
 
     lateinit var listenerClose:ListenerClose

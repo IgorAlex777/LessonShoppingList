@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.cmex.lesson2shoppinglist.R
-import com.cmex.lesson2shoppinglist.data.di.DaggerComponentShopList
+
 import com.cmex.lesson2shoppinglist.data.myLog
 import com.cmex.lesson2shoppinglist.databinding.ActivityMainBinding
 import com.cmex.lesson2shoppinglist.domain.ShopItem
@@ -29,11 +29,10 @@ class MainActivity : AppCompatActivity(),FragmentItem.ListenerClose {
     lateinit var viewModelFactory:ViewModelFactoryShopList
     private val model by lazy { ViewModelProvider(this,viewModelFactory)[ViewModelShoppingList::class.java] }
     private lateinit var  listAdapter: ListAdapterShopItems
-    private val hostActivity:AppCompatActivity?=null
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     private val component by lazy {
-        DaggerComponentShopList.create()
+        (application as MyApp).component
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         component.inject(this)
@@ -56,14 +55,11 @@ class MainActivity : AppCompatActivity(),FragmentItem.ListenerClose {
       }
     }
     private fun onSetFragment(fragment: Fragment){
-      //  hostActivity?.let {
-            supportFragmentManager.popBackStack()
+        supportFragmentManager.popBackStack()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container,fragment)
                 .addToBackStack(null)
                 .commit()
-     //   }
-
     }
     private fun initRecyclerView(){
        listAdapter= ListAdapterShopItems()
