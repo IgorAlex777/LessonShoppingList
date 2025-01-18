@@ -1,6 +1,8 @@
 package com.cmex.lesson2shoppinglist.presentation.activity
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
+import android.net.Uri
 import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -45,7 +47,12 @@ class MainActivity : AppCompatActivity(),FragmentItem.ListenerClose {
         onClickItem()
         onClickAdd()
          checkingOrientationScreen()
-
+        callContentProvider()
+    }
+    @SuppressLint("Recycle")
+    private fun callContentProvider(){
+        val url="content://com.cmex.lesson2shoppinglist/shop_item/"
+        contentResolver.query(Uri.parse(url),null,null,null,null,null)
     }
     private fun checkingOrientationScreen():Boolean{
       return  when(resources.configuration.orientation){

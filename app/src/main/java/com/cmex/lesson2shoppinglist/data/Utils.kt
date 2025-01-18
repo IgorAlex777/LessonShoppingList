@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 fun myLog(text:String){
-     Log.d("CMEX",text).toString()
+     Log.d("MyLog",text).toString()
 }
 
 @SuppressLint("SimpleDateFormat")

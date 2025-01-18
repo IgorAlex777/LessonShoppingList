@@ -2,9 +2,10 @@ package com.cmex.lesson2shoppinglist.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.cmex.lesson2shoppinglist.data.di.AppScope
 import javax.inject.Inject
 import javax.inject.Provider
-
+@AppScope
 class ViewModelFactoryShopList @Inject constructor(
     private val viewModels:@JvmSuppressWildcards Map<Class<out ViewModel>,Provider<ViewModel>>
 ):ViewModelProvider.Factory {
