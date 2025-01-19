@@ -90,7 +90,8 @@ class FragmentItem : Fragment() {
         binding.ibtnSave.setOnClickListener {
             val name=binding.etName.text.toString()
             val count=binding.etCountItem.text.toString()
-            model.onSaveShopItem(name,count,idShopItem)
+           // model.onSaveShopItem(name,count,idShopItem)
+            model.onAddContentResolver(requireContext(),name,count.toInt())
         }
     }
     private fun settingDataOnScreen(){

@@ -25,6 +25,7 @@ import com.cmex.lesson2shoppinglist.presentation.adapter.AdapterShopList
 import com.cmex.lesson2shoppinglist.presentation.adapter.ListAdapterShopItems
 import com.cmex.lesson2shoppinglist.presentation.fragments.FragmentItem
 import javax.inject.Inject
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity(),FragmentItem.ListenerClose {
     @Inject
@@ -52,7 +53,27 @@ class MainActivity : AppCompatActivity(),FragmentItem.ListenerClose {
     @SuppressLint("Recycle")
     private fun callContentProvider(){
         val url="content://com.cmex.lesson2shoppinglist/shop_item/"
-        contentResolver.query(Uri.parse(url),null,null,null,null,null)
+        thread {
+            val cursor= contentResolver.query(
+                Uri.parse(url),
+                null,
+                null,
+                null,
+                null,
+                null)
+            myLog("cursor=$cursor")
+
+            while (cursor?.moveToNext()==true){
+             val id=cursor.getInt(cursor.getColumnIndexOrThrow("id"))
+             val name=cursor.getString(cursor.getColumnIndexOrThrow("name"))
+             val count=cursor.getInt(cursor.getColumnIndexOrThrow("count"))
+             val active=cursor.getInt(cursor.getColumnIndexOrThrow("active"))>0
+              val shopItem=ShopItem(id=id,name=name,count=count,active=active)
+                myLog("shopItem=$shopItem")
+            }
+           cursor?.close()
+        }
+
     }
     private fun checkingOrientationScreen():Boolean{
       return  when(resources.configuration.orientation){

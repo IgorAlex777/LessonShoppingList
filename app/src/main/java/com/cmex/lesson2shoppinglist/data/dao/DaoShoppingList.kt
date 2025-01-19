@@ -1,5 +1,6 @@
 package com.cmex.lesson2shoppinglist.data.dao
 
+import android.database.Cursor
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
@@ -16,6 +17,9 @@ interface DaoShoppingList {
 
     @Query("SELECT *  FROM shop_item")
     fun getShopItemsFromDb():LiveData<List<ShopItemData>>
+
+    @Query("SELECT *  FROM shop_item")
+    fun getShopItemsCursor():Cursor
 
    @Update
    suspend  fun editShopItem(shopItem: ShopItemData)

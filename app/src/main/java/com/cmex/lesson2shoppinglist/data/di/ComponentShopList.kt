@@ -10,6 +10,7 @@ import dagger.Component
 interface ComponentShopList {
     fun inject(activity: MainActivity)
     fun inject(fragmentItem: FragmentItem)
+    fun inject(provider:ComponentShopList)
     @Component.Factory
     interface Factory {
         fun create(@BindsInstance application: Application): ComponentShopList

@@ -1,12 +1,16 @@
 package com.cmex.lesson2shoppinglist.presentation
 
 import android.app.Application
+import android.content.ContentValues
+import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cmex.lesson2shoppinglist.data.ImplWorkShopList
+import com.cmex.lesson2shoppinglist.data.mappers.MappersShopItem
 import com.cmex.lesson2shoppinglist.data.usecase.AddShopItemUseCase
 import com.cmex.lesson2shoppinglist.data.usecase.EditShopItemUseCase
 import com.cmex.lesson2shoppinglist.data.usecase.GetShopItemUseCase
@@ -20,15 +24,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ViewModelShoppingList @Inject constructor(
-    private val getShoppingListUseCase: GetShoppingListUseCase,
+
     private val getShopItemUseCase: GetShopItemUseCase,
+    private val getShoppingListUseCase:GetShoppingListUseCase,
     private val editShopItemUseCase: EditShopItemUseCase,
     private val removeShopItemUseCase: RemoveShopItemUseCase,
     private val addShopItemUseCase: AddShopItemUseCase
 ) : ViewModel() {
 
 
-    val shopListViewModel=getShoppingListUseCase.getShoppingListUC()
+   private val shopListViewModel=getShoppingListUseCase.getShoppingListUC()
 
 
     private val _errorInputName=MutableLiveData<Boolean>()
@@ -116,6 +121,18 @@ class ViewModelShoppingList @Inject constructor(
     private fun endSaving(){
       _endSavingModel.value=Unit
     }
-
+    fun onAddContentResolver(context:Context,name:String,count: Int){
+        val uri= Uri.parse("content://com.cmex.lesson2shoppinglist/shop_item/")
+        context.contentResolver.insert(
+            uri,
+            ContentValues().apply {
+                put("id",0)
+                put("name",name)
+                put("count",count)
+                put("active",true)
+            }
+            )
+        endSaving()
+    }
 
 }
