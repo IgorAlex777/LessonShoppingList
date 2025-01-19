@@ -33,7 +33,7 @@ class ViewModelShoppingList @Inject constructor(
 ) : ViewModel() {
 
 
-   private val shopListViewModel=getShoppingListUseCase.getShoppingListUC()
+ val shopListViewModel=getShoppingListUseCase.getShoppingListUC()
 
 
     private val _errorInputName=MutableLiveData<Boolean>()
