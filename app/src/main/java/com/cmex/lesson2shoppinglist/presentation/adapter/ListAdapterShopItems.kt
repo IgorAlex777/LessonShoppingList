@@ -17,7 +17,7 @@ import com.cmex.lesson2shoppinglist.databinding.ItemInactiveBinding
 import com.cmex.lesson2shoppinglist.databinding.ItemShopBinding
 import com.cmex.lesson2shoppinglist.domain.ShopItem
 
-class ListAdapterShopItems : ListAdapter<ShopItem,ListAdapterShopItems.Holder>(DiffUtilShopItem()){
+class ListAdapterShopItems : ListAdapter<ShopItem,Holder>(DiffUtilShopItem()){
     private lateinit var  binding:ViewDataBinding
     private lateinit var  context: Context
     var listenerClickLong:((ShopItem)->Unit)?=null
@@ -44,31 +44,19 @@ class ListAdapterShopItems : ListAdapter<ShopItem,ListAdapterShopItems.Holder>(D
     }
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.itemView.setOnLongClickListener {
-            listenerClickLong?.let { it1 -> it1(getItem(position)) }
-           // listenerClickLong?.invoke(shopList[position])
+            listenerClickLong?.invoke(getItem(holder.adapterPosition))
+        //    **********  --- не getItem(position), а getItem(holder.adapterPosition)!!!!!!
+
+
             true
         }
         holder.itemView.setOnClickListener {
-            listenerClickItem?.invoke(getItem(position))
+
+            listenerClickItem?.invoke(getItem(holder.adapterPosition))
         }
         return holder.setData(getItem(position))
     }
-    class Holder(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
 
-
-        fun setData(shopItem: ShopItem) {
-           when(binding){
-               is ItemActiveBinding->{
-                   binding.tvName.text=shopItem.name
-                   binding.tvCount.text=shopItem.count.toString()
-               }
-               is ItemInactiveBinding->{
-                   binding.tvName.text=shopItem.name
-                   binding.tvCount.text=shopItem.count.toString()
-               }
-           }
-        }
-    }
         companion object{
             private const val ACTIVE=777
             private const val INACTIVE=888

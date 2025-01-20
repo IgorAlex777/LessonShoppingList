@@ -1,15 +1,13 @@
 package com.cmex.lesson2shoppinglist.presentation.activity
 
 import android.content.res.Configuration
-import android.opengl.Visibility
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.cmex.lesson2shoppinglist.R
 import com.cmex.lesson2shoppinglist.data.myLog
@@ -17,7 +15,6 @@ import com.cmex.lesson2shoppinglist.databinding.ActivityMainBinding
 import com.cmex.lesson2shoppinglist.domain.ShopItem
 import com.cmex.lesson2shoppinglist.presentation.MyDialog
 import com.cmex.lesson2shoppinglist.presentation.ViewModelShoppingList
-import com.cmex.lesson2shoppinglist.presentation.adapter.AdapterShopList
 import com.cmex.lesson2shoppinglist.presentation.adapter.ListAdapterShopItems
 import com.cmex.lesson2shoppinglist.presentation.fragments.FragmentItem
 
@@ -69,7 +66,9 @@ class MainActivity : AppCompatActivity(),FragmentItem.ListenerClose {
             if(it.isEmpty()){
                 binding.ivEmptyList.visibility=View.VISIBLE
             }else binding.ivEmptyList.visibility=View.GONE
+            myLog("observer list-it.size =${it.size}")
            listAdapter.submitList(it)
+            myLog("listAdapter.size=${listAdapter.currentList.size}")
         }
     }
     private fun onClickAdd(){
@@ -93,11 +92,13 @@ class MainActivity : AppCompatActivity(),FragmentItem.ListenerClose {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
+
                 MyDialog.dialogDeleteShopItem(this@MainActivity,listAdapter.currentList[position])
                 MyDialog.listenerNoDelete={
                     listAdapter.notifyItemChanged(position)
                 }
                 MyDialog.listenerDelete={
+                    myLog("в Диалоге item=$it")
                     model.removeShopItem(it)
                 }
             }
