@@ -44,12 +44,12 @@ class ListAdapterShopItems : ListAdapter<ShopItem,ListAdapterShopItems.Holder>(D
     }
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.itemView.setOnLongClickListener {
-            listenerClickLong?.let { it1 -> it1(getItem(position)) }
+            listenerClickLong?.let { it1 -> it1(getItem(holder.adapterPosition)) }
            // listenerClickLong?.invoke(shopList[position])
             true
         }
         holder.itemView.setOnClickListener {
-            listenerClickItem?.invoke(getItem(position))
+            listenerClickItem?.invoke(getItem(holder.adapterPosition))
         }
         return holder.setData(getItem(position))
     }
